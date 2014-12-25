@@ -57,12 +57,14 @@ object List { // `List` companion object. Contains functions for creating and wo
     case Cons(_, tail) => Cons(h, tail)
   }
 
+  @annotation.tailrec
   def drop[A](l: List[A], n: Int): List[A] = l match {
     case Nil => Nil
     case _ if n <= 0 => l
     case Cons(_, tail) => drop(tail, n -1)
   }
 
+  @annotation.tailrec
   def dropWhile[A](l: List[A], f: A => Boolean): List[A] = l match {
     case Nil => Nil
     case Cons(h, tail) if f(h) => dropWhile(tail, f)
@@ -80,6 +82,7 @@ object List { // `List` companion object. Contains functions for creating and wo
     case Cons(h, tail) => 1 + length(tail)
   }
 
+  @annotation.tailrec
   def foldLeft[A,B](l: List[A], z: B)(f: (B, A) => B): B = l match {
     case Nil => z
     case Cons(h, tail) => foldLeft(tail, f(z, h))(f)
@@ -88,5 +91,51 @@ object List { // `List` companion object. Contains functions for creating and wo
   def map[A,B](l: List[A])(f: A => B): List[B] = l match {
     case Nil => Nil
     case Cons(h, tail) => Cons(f(h), map(tail)(f))
+  }
+
+  def reverse[A](l: List[A]): List[A] = {
+    foldLeft(l, Nil: List[A]) {
+      (list, item) => Cons(item, list)
+    }
+  }
+
+  def concatList[A](l: List[List[A]]): List[A] = {
+    foldRight(l, Nil: List[A]) {
+      (list, currList) =>
+        foldRight(list, currList) {
+          (item, cL) => Cons(item, cL)
+        }
+    }
+  }
+
+  def filter[A](l: List[A])(f: A => Boolean): List[A] = l match {
+    case Nil => Nil
+    case Cons(h, tail) if f(h) => Cons(h, filter(tail)(f))
+    case Cons(_, tail) => filter(tail)(f)
+  }
+
+  def flatMap[A,B](l: List[A])(f: A => List[B]): List[B] = l match {
+    case Nil => Nil
+    case Cons(h, tail) =>
+      foldRight(f(h), flatMap(tail)(f)) {
+        (item, cL) => Cons(item, cL)
+      }
+  }
+
+  def filter2[A](l: List[A])(f: A => Boolean): List[A] = {
+    List.flatMap(l)( item => if (f(item)) List(item) else Nil )
+  }
+
+  def hasSubsequence[A](l: List[A], sub: List[A]): Boolean = {
+    @annotation.tailrec
+    def loop[A](l: List[A], sub: List[A], curr: List[A]): Boolean = curr match {
+      case Nil => true
+      case Cons(hSub, tSub) => l match {
+        case Cons(h, t) if h == hSub => loop(t, sub, tSub)
+        case Cons(h, t) => loop(t, sub, sub)
+        case Nil => false
+      }
+    }
+    loop(l, sub, sub)
   }
 }

@@ -64,4 +64,37 @@ class ListSpec extends FlatSpec with Matchers with PropertyChecks {
   "A List's map" should "have produce List(9,21,6,24,3) when invoked with (List(3,7,2,8,1))(_ * 3)" in {
     List.map(List(3,7,2,8,1))(_ * 3) should be === List(9,21,6,24,3)
   }
+
+  "A List's reverse" should "have produce List(3,7,2,8,1) when invoked with List(1,8,2,7,3))" in {
+    List.reverse(List(1,8,2,7,3)) should be === List(3,7,2,8,1)
+  }
+
+  it should "have produce the same list when invoked two times" in {
+    List.reverse(List.reverse(List(3,7,2,8,1))) should be === List(3,7,2,8,1)
+  }
+
+  "A List's concatList" should "have produce List(3,7,2,8,1) when invoked with List(List(3),List(7,2), Nil,List(8,1))" in {
+    List.concatList(List(List(3),List(7,2), Nil,List(8,1))) should be === List(3,7,2,8,1)
+  }
+
+  "A List's filter" should "have produce List(3,2,1) when invoked with List(3,7,2,8,1)(_ < 5)" in {
+    List.filter(List(3,7,2,8,1))(_ < 5) should be === List(3,2,1)
+  }
+
+  "A List's flatMap" should "have produce List(3,3,7,7,2,2,8,8,1,1) when invoked with List(3,7,2,8,1))(i => List(i,i))" in {
+    List.flatMap(List(3,7,2,8,1))(i => List(i,i)) should be === List(3,3,7,7,2,2,8,8,1,1)
+  }
+
+  "A List's filter2" should "have produce List(3,2,1) when invoked with List(3,7,2,8,1)(_ < 5)" in {
+    List.filter2(List(3,7,2,8,1))(_ < 5) should be === List(3,2,1)
+  }
+
+  "A List's hasSubsequence" should "have return true when List(3,7,3,2,3,8,1,3) contains List(3,8,1)" in {
+    assert(!List.hasSubsequence(List(3,7,3,2,3,8,1,3), List(3,8,2)))
+    assert(!List.hasSubsequence(List(3,7,3,2,3,8,1,3), List(2,3,8,2)))
+    assert(!List.hasSubsequence(List(3,7,3,2,3,8,1,3), List(3,7,2)))
+    assert(List.hasSubsequence(List(3,7,3,2,3,8,1,3), List(3,7)))
+    assert(List.hasSubsequence(List(3,7,3,2,3,8,1,3), List(3,8,1)))
+    assert(List.hasSubsequence(List(3,7,3,2,3,8,1,3), List(2,3,8,1)))
+  }
 }
