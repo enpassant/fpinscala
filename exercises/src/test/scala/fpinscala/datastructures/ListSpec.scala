@@ -89,7 +89,7 @@ class ListSpec extends FlatSpec with Matchers with PropertyChecks {
     List.filter2(List(3,7,2,8,1))(_ < 5) should be === List(3,2,1)
   }
 
-  "A List's hasSubsequence" should "have return true when List(3,7,3,2,3,8,1,3) contains List(3,8,1)" in {
+  "A List's hasSubsequence" should "have return true when List(3,7,3,2,3,8,1,3) contains List(3,8,1), List(3,7,2), List(3,7), List(3,8,1) and List(2,3,8,1) and return false when not contains List(3,8,2) and List(2,3,8,2)" in {
     assert(!List.hasSubsequence(List(3,7,3,2,3,8,1,3), List(3,8,2)))
     assert(!List.hasSubsequence(List(3,7,3,2,3,8,1,3), List(2,3,8,2)))
     assert(!List.hasSubsequence(List(3,7,3,2,3,8,1,3), List(3,7,2)))
