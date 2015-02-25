@@ -39,6 +39,7 @@ object MyModule {
   // Exercise 1: Write a function to compute the nth fibonacci number
 
   def fib(n: Int): Int = {
+    @annotation.tailrec
     def loop(a: Int, b: Int, n: Int): Int = {
       if (n > 0) loop(b, a + b, n - 1)
       else a
@@ -116,6 +117,16 @@ object MonomorphicBinarySearch {
 }
 
 object PolymorphicFunctions {
+  import MyModule._
+
+  // Now we can use our general `formatResult` function
+  // with both `abs` and `factorial`
+  def main(args: Array[String]): Unit = {
+    println( isSorted(Array(), (x: Int, y: Int) => x < y) )
+    println( isSorted(Array(7), (x: Int, y: Int) => x < y) )
+    println( isSorted(Array(1,3,4,6,8,9), (x: Int, y: Int) => x < y) )
+    println( isSorted(Array(1,3,4,6,2,9), (x: Int, y: Int) => x < y) )
+  }
 
   // Here's a polymorphic version of `binarySearch`, parameterized on
   // a function for testing whether an `A` is greater than another `A`.
@@ -137,7 +148,14 @@ object PolymorphicFunctions {
 
   // Exercise 2: Implement a polymorphic function to check whether
   // an `Array[A]` is sorted
-  def isSorted[A](as: Array[A], gt: (A,A) => Boolean): Boolean = ???
+  def isSorted[A](as: Array[A], gt: (A,A) => Boolean): Boolean = {
+    @annotation.tailrec
+    def loop(n: Int): Boolean = if (n >= as.length) true
+      else if (!gt(as(n-1), as(n))) false
+      else loop(n + 1)
+
+    loop(1)
+  }
 
   // Polymorphic functions are often so constrained by their type
   // that they only have one implementation! Here's an example:
