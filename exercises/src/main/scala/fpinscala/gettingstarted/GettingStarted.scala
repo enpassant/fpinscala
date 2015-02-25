@@ -168,7 +168,8 @@ object PolymorphicFunctions {
   // an `Array[A]` is sorted
   def isSorted[A](as: Array[A], gt: (A,A) => Boolean): Boolean = {
     @annotation.tailrec
-    def loop(n: Int): Boolean = if (n >= as.length) true
+    def loop(n: Int): Boolean =
+      if (n >= as.length) true
       else if (!gt(as(n-1), as(n))) false
       else loop(n + 1)
 
