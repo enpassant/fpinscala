@@ -138,6 +138,12 @@ object PolymorphicFunctions {
 
     val addu = uncurry(addc)
     println( addu(4, 6) )
+
+    def times(x: Int, y: Int) = x * y
+    val timesc = curry(times)
+
+    // 4 * 2 + 5
+    println( compose(addc(5), timesc(2))(4) )
   }
 
   // Here's a polymorphic version of `binarySearch`, parameterized on
@@ -201,5 +207,5 @@ object PolymorphicFunctions {
   // Exercise 5: Implement `compose`
 
   def compose[A,B,C](f: B => C, g: A => B): A => C =
-    ???
+    a => f(g(a))
 }
