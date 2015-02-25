@@ -126,6 +126,15 @@ object PolymorphicFunctions {
     println( isSorted(Array(7), (x: Int, y: Int) => x < y) )
     println( isSorted(Array(1,3,4,6,8,9), (x: Int, y: Int) => x < y) )
     println( isSorted(Array(1,3,4,6,2,9), (x: Int, y: Int) => x < y) )
+
+    def add(x: Int, y: Int) = x + y
+    val addc = curry(add)
+    println( addc(4)(6) )
+
+    def isSortedCurried[A] = curry(isSorted[A])
+    println( isSortedCurried(Array(1,3,4,6,8,9)) {
+      (x: Int, y: Int) => x < y
+    })
   }
 
   // Here's a polymorphic version of `binarySearch`, parameterized on
@@ -168,7 +177,7 @@ object PolymorphicFunctions {
   // Note that `=>` associates to the right, so we could
   // write the return type as `A => B => C`
   def curry[A,B,C](f: (A, B) => C): A => (B => C) =
-    ???
+    a => b => f(a, b)
 
   // NB: The `Function2` trait has a `curried` method already
 
