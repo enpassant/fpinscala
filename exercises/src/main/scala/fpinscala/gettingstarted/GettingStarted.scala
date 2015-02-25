@@ -135,6 +135,9 @@ object PolymorphicFunctions {
     println( isSortedCurried(Array(1,3,4,6,8,9)) {
       (x: Int, y: Int) => x < y
     })
+
+    val addu = uncurry(addc)
+    println( addu(4, 6) )
   }
 
   // Here's a polymorphic version of `binarySearch`, parameterized on
@@ -183,7 +186,7 @@ object PolymorphicFunctions {
 
   // Exercise 4: Implement `uncurry`
   def uncurry[A,B,C](f: A => B => C): (A, B) => C =
-    ???
+    (a, b) => f(a)(b)
 
   /*
   NB: There is a method on the `Function` object in the standard library,
