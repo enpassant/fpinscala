@@ -35,9 +35,16 @@ trait Stream[+A] {
     case _ => Stream.empty
   }
 
-  def drop(n: Int): Stream[A] = sys.error("todo")
+  def drop(n: Int): Stream[A] = this match {
+    case Cons(h, t) if n > 0 => t().drop(n - 1)
+    case s => s
+  }
 
-  def forAll(p: A => Boolean): Boolean = sys.error("todo")
+  def forAll(p: A => Boolean): Boolean = this match {
+    case Cons(h, t) if !p(h()) => false
+    case Cons(h, t) => t().forAll(p)
+    case Empty => true
+  }
 
   def startsWith[B](s: Stream[B]): Boolean = sys.error("todo")
 }
@@ -58,19 +65,15 @@ object Stream {
     else cons(as.head, apply(as.tail: _*))
 
   val ones: Stream[Int] = Stream.cons(1, ones)
-  def from(n: Int): Stream[Int] = sys.error("todo")
+  def from(n: Int): Stream[Int] = Stream.cons(n, from(n + 1))
 
-  def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = sys.error("todo")
-}
+  def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = f(z) match {
+    case Some((a, s)) => Stream.cons(a, unfold(s)(f))
+    case None => Stream.empty
+  }
 
-object StreamTest {
-
-    def main(args: Array[String]) {
-        val stream = Stream(3, 8, 2, 23, 1, 6, 7, 2, 3, 2, 11)
-
-        println( stream.toList )
-        println( stream.take(5).toList )
-        println( stream.takeWhile(_ != 7).toList )
-    }
+  def fib: Stream[Int] = Stream.unfold((1, 1)) {
+    s => Some(s._1, (s._2, s._1 + s._2))
+  }
 }
 
