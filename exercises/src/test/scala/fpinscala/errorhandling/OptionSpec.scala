@@ -59,5 +59,15 @@ class OptionSpec extends FlatSpec with Matchers with PropertyChecks {
     val optValue: Option[Int] = Some(6)
     assert(optValue.filter(_ >= 5) === Some(6))
   }
+
+  "Variance" should "have produce None when invoked on empty seq" in {
+    val seq = Seq.empty
+    assert(Option.variance(seq) === None)
+  }
+
+  it should "have produce 2 when invoked with Seq(1,2,3,4,5)" in {
+    val seq = Seq(1.0,2.0,3.0,4.0,5.0)
+    assert(Option.variance(seq) === Some(2))
+  }
 }
 
