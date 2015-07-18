@@ -69,5 +69,20 @@ class OptionSpec extends FlatSpec with Matchers with PropertyChecks {
     val seq = Seq(1.0,2.0,3.0,4.0,5.0)
     assert(Option.variance(seq) === Some(2))
   }
+
+  "Sequence" should "have produce Some(List()) when invoked on empty list" in {
+    val list = List.empty
+    assert(Option.sequence(list) === Some(List.empty))
+  }
+
+  it should "have produce None when invoked with List(Some(1),None,Some(5))" in {
+    val list = List(Some(1),None,Some(5))
+    assert(Option.sequence(list) === None)
+  }
+
+  it should "have produce List(Some(1),Some(5)) when invoked with List(Some(1),Some(5))" in {
+    val list = List(Some(1),Some(5))
+    assert(Option.sequence(list) === List(Some(1),Some(5)))
+  }
 }
 
