@@ -80,9 +80,9 @@ class OptionSpec extends FlatSpec with Matchers with PropertyChecks {
     assert(Option.sequence(list) === None)
   }
 
-  it should "have produce List(Some(1),Some(5)) when invoked with List(Some(1),Some(5))" in {
+  it should "have produce List(Some(1),Some(5)) when invoked with Some(List(1,5))" in {
     val list = List(Some(1),Some(5))
-    assert(Option.sequence(list) === List(Some(1),Some(5)))
+    assert(Option.sequence(list) === Some(List(1,5)))
   }
 
   "Map2" should "have produce None when invoked with None" in {

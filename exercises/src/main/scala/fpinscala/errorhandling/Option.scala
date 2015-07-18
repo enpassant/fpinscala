@@ -66,7 +66,10 @@ object Option {
     case (Some(x), Some(y)) => Some(f(x, y))
   }
 
-  def sequence[A](a: List[Option[A]]): Option[List[A]] = sys.error("todo")
+  def sequence[A](a: List[Option[A]]): Option[List[A]] =
+    a.foldRight[Option[List[A]]](Some(Nil)) {
+      (xs, x) => map2(xs, x)(_ :: _)
+    }
 
   def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] = sys.error("todo")
 }
