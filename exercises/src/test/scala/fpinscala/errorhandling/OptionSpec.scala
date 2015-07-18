@@ -96,5 +96,20 @@ class OptionSpec extends FlatSpec with Matchers with PropertyChecks {
     def fn(a: Int, b: Int) = a + b
     assert(Option.map2(Some(2), Some(3))(fn) === Some(5))
   }
+
+  "Traverse" should "have produce Some(List()) when invoked on empty list" in {
+    val list: List[String] = List.empty
+    assert(Option.traverse(list)(i => Option.Try(i.toInt)) === Some(List.empty))
+  }
+
+  it should "have produce None when invoked with List(1,s)" in {
+    val list = List("1", "s")
+    assert(Option.traverse(list)(i => Option.Try(i.toInt)) === None)
+  }
+
+  it should "have produce List(Some(1),Some(5)) when invoked with Some(List(1,5))" in {
+    val list = List("1", "5")
+    assert(Option.traverse(list)(i => Option.Try(i.toInt)) === Some(List(1,5)))
+  }
 }
 

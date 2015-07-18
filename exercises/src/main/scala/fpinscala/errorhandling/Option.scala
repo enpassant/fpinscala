@@ -71,5 +71,12 @@ object Option {
       (xs, x) => map2(xs, x)(_ :: _)
     }
 
-  def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] = sys.error("todo")
+  def Try[A](a: => A): Option[A] =
+    try Some(a)
+    catch { case e: Exception => None }
+
+  def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] =
+    a.foldRight[Option[List[B]]](Some(Nil)) {
+      (x, xs) => map2(f(x), xs)(_ :: _)
+    }
 }
