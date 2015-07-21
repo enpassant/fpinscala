@@ -54,4 +54,38 @@ class EitherSpec extends FlatSpec with Matchers with PropertyChecks {
     val either: Either[String, String] = Right("test")
     assert(either.map2(Right("TEST"))(_ + _) === Right("testTEST"))
   }
+
+  "Either's traverse" should "have produce Right(List) when invoked on Left" in {
+    val list: List[String] = List.empty
+    assert(Either.traverse(list)(i => Either.Try(i.toInt)) === Right(List.empty))
+  }
+
+  it should "have produce Left when invoked with List(1,s)" in {
+    val list = List("1", "s")
+    val result = Either.traverse(list)(i => Either.Try(i.toInt))
+    assert(result match {
+      case Left(_) => true
+      case _ => false
+    })
+  }
+
+  it should "have produce Right(List(1,5)) when invoked with List(1,5)" in {
+    val list = List("1", "5")
+    assert(Either.traverse(list)(i => Either.Try(i.toInt)) === Right(List(1,5)))
+  }
+
+  "Either's sequence" should "have produce Some(List()) when invoked on empty list" in {
+    val list = List.empty
+    assert(Either.sequence(list) === Right(List.empty))
+  }
+
+  it should "have produce Left when invoked with List(Right(1),Left(2),Right(5))" in {
+    val list = List(Right(1),Left(2),Right(5))
+    assert(Either.sequence(list) === Left(2))
+  }
+
+  it should "have produce Right(List(1,5)) when invoked with List(Right(1),Right(5))" in {
+    val list = List(Right(1),Right(5))
+    assert(Either.sequence(list) === Right(List(1,5)))
+  }
 }
