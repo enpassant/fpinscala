@@ -60,7 +60,7 @@ class OptionSpec extends FlatSpec with Matchers with PropertyChecks {
     assert(optValue.filter(_ >= 5) === Some(6))
   }
 
-  "Variance" should "have produce None when invoked on empty seq" in {
+  "Option's variance" should "have produce None when invoked on empty seq" in {
     val seq = Seq.empty
     assert(Option.variance(seq) === None)
   }
@@ -70,7 +70,7 @@ class OptionSpec extends FlatSpec with Matchers with PropertyChecks {
     assert(Option.variance(seq) === Some(2))
   }
 
-  "Sequence" should "have produce Some(List()) when invoked on empty list" in {
+  "Option's sequence" should "have produce Some(List()) when invoked on empty list" in {
     val list = List.empty
     assert(Option.sequence(list) === Some(List.empty))
   }
@@ -80,12 +80,12 @@ class OptionSpec extends FlatSpec with Matchers with PropertyChecks {
     assert(Option.sequence(list) === None)
   }
 
-  it should "have produce List(Some(1),Some(5)) when invoked with Some(List(1,5))" in {
+  it should "have produce Some(List(1,5)) when invoked with List(1,5)" in {
     val list = List(Some(1),Some(5))
     assert(Option.sequence(list) === Some(List(1,5)))
   }
 
-  "Map2" should "have produce None when invoked with None" in {
+  "Option's map2" should "have produce None when invoked with None" in {
     def fn(a: Int, b: Int) = a + b
     assert(Option.map2(None, None)(fn) === None)
     assert(Option.map2(Some(2), None)(fn) === None)
@@ -97,7 +97,7 @@ class OptionSpec extends FlatSpec with Matchers with PropertyChecks {
     assert(Option.map2(Some(2), Some(3))(fn) === Some(5))
   }
 
-  "Traverse" should "have produce Some(List()) when invoked on empty list" in {
+  "Option's traverse" should "have produce Some(List()) when invoked on empty list" in {
     val list: List[String] = List.empty
     assert(Option.traverse(list)(i => Option.Try(i.toInt)) === Some(List.empty))
   }
@@ -107,7 +107,7 @@ class OptionSpec extends FlatSpec with Matchers with PropertyChecks {
     assert(Option.traverse(list)(i => Option.Try(i.toInt)) === None)
   }
 
-  it should "have produce List(Some(1),Some(5)) when invoked with Some(List(1,5))" in {
+  it should "have produce Some(List(1,5)) when invoked with List(1,5)" in {
     val list = List("1", "5")
     assert(Option.traverse(list)(i => Option.Try(i.toInt)) === Some(List(1,5)))
   }
